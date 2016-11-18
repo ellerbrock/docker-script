@@ -2,7 +2,7 @@
 
 # Docker Shell Scripts
 # ====================
-# Version: 	0.1.0
+# Version: 	0.1.1
 #
 # Author: 	Maik Ellerbrock
 # GitHub: 	https://github.com/ellerbrock/docker-scripts
@@ -11,13 +11,13 @@
 # update all containers
 container_update() {
   echo updating containers ...
-  docker images | grep -v "REPOSITORY" | awk '{print $1}' | xargs -L1 docker pull
+  docker images | grep -v "REPOSITORY" | awk '{print $1":"$2}' | xargs -L1 docker pull
 }
 
 # export containers
 container_export() {
   echo export containers to containers.txt ...
-  docker images | grep -v "REPOSITORY" | awk '{print $1}' | xargs -L1 echo docker pull > containers.txt
+  docker images | grep -v "REPOSITORY" | awk '{print $1":"$2}' | xargs -L1 echo docker pull > containers.txt
 }
 
 # remove all unnamed container
