@@ -2,7 +2,7 @@
 
 # Docker Shell Scripts
 # ====================
-# Version: 	0.0.1
+# Version: 	0.1.0
 #
 # Author: 	Maik Ellerbrock
 # GitHub: 	https://github.com/ellerbrock/docker-scripts
@@ -12,6 +12,12 @@
 container_update() {
   echo updating containers ...
   docker images | grep -v "REPOSITORY" | awk '{print $1}' | xargs -L1 docker pull
+}
+
+# export containers
+container_export() {
+  echo export containers to containers.txt ...
+  docker images | grep -v "REPOSITORY" | awk '{print $1}' | xargs -L1 echo docker pull > containers.txt
 }
 
 # remove all unnamed container
@@ -29,8 +35,9 @@ volumes_del_dangling() {
 echo "Docker Shell Script"
 echo "==================="
 echo "[1] update container"
-echo "[2] delete unnamed container"
-echo "[3] delete dangling volumes"
+echo "[2] export container to ./containers.txt"
+echo "[3] delete unnamed container"
+echo "[4] delete dangling volumes"
 
 read -p " " -n 1 action
 echo
@@ -38,8 +45,10 @@ echo
 if [[ $action == 1 ]]; then
   container_update
 elif [[ $action == 2 ]]; then
-  container_del_unnamed
+  container_export
 elif [[ $action == 3 ]]; then
+  container_del_unnamed
+elif [[ $action == 4 ]]; then
   volumes_del_dangling
 else
   echo "wrong parameter"

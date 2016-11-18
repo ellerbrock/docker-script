@@ -5,23 +5,27 @@ _Bash Script for Docker Tasks_
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg)](https://github.com/ellerbrock/open-source-badges/) [![Gitter Chat](https://badges.gitter.im/frapsoft/frapsoft.svg)](https://gitter.im/frapsoft/frapsoft/)
 
 
-![](https://github.frapsoft.com/top/docker-script.jpg)
-
 ```bash
 #!/usr/bin/env bash
 
 # Docker Shell Scripts
 # ====================
-# Version: 	0.0.1
+# Version: 	0.1.0
 #
 # Author: 	Maik Ellerbrock
 # GitHub: 	https://github.com/ellerbrock/docker-scripts
-# Twitter:   https://twitter.com/frapsoft
+# Twitter:      https://twitter.com/frapsoft
 
 # update all containers
 container_update() {
   echo updating containers ...
   docker images | grep -v "REPOSITORY" | awk '{print $1}' | xargs -L1 docker pull
+}
+
+# export containers
+container_export() {
+  echo export containers to containers.txt ...
+  docker images | grep -v "REPOSITORY" | awk '{print $1}' | xargs -L1 echo docker pull > containers.txt
 }
 
 # remove all unnamed container
@@ -39,8 +43,9 @@ volumes_del_dangling() {
 echo "Docker Shell Script"
 echo "==================="
 echo "[1] update container"
-echo "[2] delete unnamed container"
-echo "[3] delete dangling volumes"
+echo "[2] export container to ./containers.txt"
+echo "[3] delete unnamed container"
+echo "[4] delete dangling volumes"
 
 read -p " " -n 1 action
 echo
@@ -48,12 +53,15 @@ echo
 if [[ $action == 1 ]]; then
   container_update
 elif [[ $action == 2 ]]; then
-  container_del_unnamed
+  container_export
 elif [[ $action == 3 ]]; then
+  container_del_unnamed
+elif [[ $action == 4 ]]; then
   volumes_del_dangling
 else
   echo "wrong parameter"
 fi
+
 ```
 
 Find me on Docker Hub: <https://hub.docker.com/r/frapsoft/>
@@ -63,4 +71,3 @@ Find me on Docker Hub: <https://hub.docker.com/r/frapsoft/>
 _Get the latest News about Web Development, Open Source, Tooling, Server & Security_
 
 [![Twitter](https://github.frapsoft.com/social/twitter.png)](https://twitter.com/frapsoft/)[![Facebook](https://github.frapsoft.com/social/facebook.png)](https://www.facebook.com/frapsoft/)[![Google+](https://github.frapsoft.com/social/google-plus.png)](https://plus.google.com/116540931335841862774)[![Gitter](https://github.frapsoft.com/social/gitter.png)](https://gitter.im/frapsoft/frapsoft/)[![Github](https://github.frapsoft.com/social/github.png)](https://github.com/ellerbrock/)
-
